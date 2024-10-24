@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import { MapContainer, Popup, Marker, TileLayer } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
 import { MapPin, Share2 } from 'lucide-react'
 import {
     Dialog,
@@ -14,6 +13,10 @@ import {
 import CopyButton from '@/components/copy-button'
 import { Input } from '@/components/ui/input'
 import TourCard from '@/components/pages/(client)/tour/tour-card'
+import dynamic from 'next/dynamic'
+
+const Map = dynamic(() => import('@/components/map'), { ssr: false })
+
 function Page() {
     return (
         <div className="grid h-full grid-cols-12">
@@ -107,21 +110,7 @@ function Page() {
             </div>
             {/* Map */}
             <div className="relative col-span-8">
-                <MapContainer
-                    className="h-full w-full"
-                    center={[10.8461814, 106.6554168]}
-                    zoom={13}
-                >
-                    <TileLayer
-                        // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        url="https://map-resource.soctrip.com/tile/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={[10.8461814, 106.6554168]}>
-                        <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
-                        </Popup>
-                    </Marker>
-                </MapContainer>
+                <Map />
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 'use client'
 
 import Counter from '@/components/Counter'
-import DayPicker from '@/components/day-picker'
+import { DayPicker } from '@/components/day-picker'
 import Timeline from '@/components/Timeline'
 import { Button } from '@/components/ui/button'
 import { HoverCardContent } from '@/components/ui/hover-card'
