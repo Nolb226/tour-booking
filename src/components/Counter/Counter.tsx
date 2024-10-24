@@ -38,7 +38,7 @@ function Counter({ maximum, minimum = 0 }: TCounterProps) {
             <div className="mr-2 flex w-1/4 items-center justify-center">
                 <Button
                     variant="ghost"
-                    className="size-6 text-light-color-scheme-primary-700 md:hover:bg-light-color-scheme-primary-50"
+                    className="md: size-6 text-light-color-scheme-primary-700 md:hover:bg-light-color-scheme-primary-50"
                     size="icon"
                     onClick={handleIncrement}
                 >

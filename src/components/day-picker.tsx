@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Button } from './ui/button'
 import { format } from 'date-fns'
-import { Calendar } from '../ui/calendar'
+import { Calendar } from './ui/calendar'
 import { CalendarIcon } from 'lucide-react'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import {
@@ -16,14 +16,17 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
-} from '../ui/drawer'
-import { TDatepickerProps } from './Datepicker.type'
+} from './ui/drawer'
 import vi from 'date-fns/locale/vi'
-import { root } from 'postcss'
+
+export type TDayPickerProps = {
+    date?: Date
+    setDate: (selectedDate: any) => void
+}
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 500))
 
-function Datepicker({ setDate, date }: TDatepickerProps) {
+function DayPicker({ setDate, date }: TDayPickerProps) {
     // const [date, setDate] = useState<Date>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const isDesktop = useMediaQuery('(min-width: 768px)')
@@ -89,4 +92,4 @@ function Datepicker({ setDate, date }: TDatepickerProps) {
     )
 }
 
-export default Datepicker
+export default { DayPicker }

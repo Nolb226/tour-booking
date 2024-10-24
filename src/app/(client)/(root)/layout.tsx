@@ -4,8 +4,10 @@ import React from 'react'
 function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <>
-            <Header />
-            <main className="min-h-screen">{children}</main>;
+            <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">{children}</main>
+            </div>
         </>
     )
 }

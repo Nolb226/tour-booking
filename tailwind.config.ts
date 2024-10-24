@@ -268,7 +268,9 @@ const config: Config = {
                     },
                 },
             },
-            spacing: {},
+            spacing: {
+                '34': '136px',
+            },
         },
     },
     plugins: [require('tailwindcss-animate')],

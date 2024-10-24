@@ -1,7 +1,7 @@
 'use client'
 
 import Counter from '@/components/Counter'
-import Datepicker from '@/components/Datepicker'
+import DayPicker from '@/components/day-picker'
 import Timeline from '@/components/Timeline'
 import { Button } from '@/components/ui/button'
 import { HoverCardContent } from '@/components/ui/hover-card'
@@ -212,7 +212,7 @@ function TourDetail() {
                                         <h4 className="text-base font-semibold text-light-color-scheme-gray-800">
                                             Chọn ngày
                                         </h4>
-                                        <Datepicker
+                                        <DayPicker
                                             date={date}
                                             setDate={setDate}
                                         />
@@ -277,7 +277,7 @@ function TourDetail() {
                             </div>
                             <div className="">
                                 <Tabs defaultValue="all">
-                                    <div className="border-b border-light-color-scheme-gray-200">
+                                    <div className="sticky top-[108px] min-h-[61px] border-b border-light-color-scheme-gray-200 bg-white">
                                         <TabsList className="">
                                             <ul className="mb-1 flex gap-2 py-2 text-xs">
                                                 <li>
@@ -293,7 +293,6 @@ function TourDetail() {
                                             </ul>
                                         </TabsList>
                                     </div>
-
                                     <div className="pt-4">
                                         <TabsContent value="all">
                                             <Timeline />
@@ -331,7 +330,7 @@ function TourDetail() {
                                 <h4 className="text-lg font-semibold text-light-color-scheme-gray-800">
                                     Chọn ngày
                                 </h4>
-                                <Datepicker date={date} setDate={setDate} />
+                                <DayPicker date={date} setDate={setDate} />
                             </div>
 
                             <div className="flex flex-col rounded-xl border border-light-color-scheme-gray-200 bg-white p-4 shadow-xs">
