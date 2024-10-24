@@ -17,7 +17,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from './ui/drawer'
-import vi from 'date-fns/locale/vi'
+import { vi } from 'date-fns/locale/vi'
 
 export type TDayPickerProps = {
     date?: Date
@@ -92,4 +92,4 @@ function DayPicker({ setDate, date }: TDayPickerProps) {
     )
 }
 
-export default { DayPicker }
+export { DayPicker }
