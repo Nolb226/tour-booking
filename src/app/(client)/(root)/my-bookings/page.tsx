@@ -1,5 +1,6 @@
 'use client'
 
+import ReservedTour from '@/components/pages/(client)/my-bookings/reserved-tour'
 import {
    Breadcrumb,
    BreadcrumbItem,
@@ -9,7 +10,18 @@ import {
    BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Label } from '@/components/ui/label'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import {
+   Pagination,
+   PaginationContent,
+   PaginationEllipsis,
+   PaginationItem,
+   PaginationLink,
+   PaginationNext,
+   PaginationPrevious,
+} from '@/components/ui/pagination'
+
 import { FlagIcon, HomeIcon, Search } from 'lucide-react'
 import { useState } from 'react'
 
@@ -33,14 +45,16 @@ export default function Page() {
                   </BreadcrumbItem>
                </BreadcrumbList>
             </Breadcrumb>
-            <div className="flex gap-5">
-               <div className="w-1/4">
+            <div className="flex flex-col gap-5 lg:flex-row">
+               {/* Left */}
+               <div className="lg:w-1/4">
                   <div className="flex items-center gap-3 border-l-4 border-light-color-scheme-primary-600 bg-blue-50 py-1 pl-2 text-blue-700">
                      <FlagIcon className="size-3.5" />
                      <div className="text-sm font-semibold">Tour</div>
                   </div>
                </div>
-               <div className="flex w-3/4 flex-col">
+               {/* Right */}
+               <div className="flex flex-col lg:w-3/4">
                   <div className="flex flex-col divide-y divide-light-color-scheme-gray-200 rounded-lg border border-light-color-scheme-gray-200 bg-white shadow-sm">
                      <div className="flex flex-col items-center gap-2 p-4 md:flex-row md:justify-between">
                         <h5 className="text-xl font-semibold text-light-color-scheme-gray-800">
@@ -60,55 +74,90 @@ export default function Page() {
                         </Label>
                      </div>
                      <div className="p-4">
-                        <ToggleGroup
-                           value={filter}
-                           onValueChange={(value) => setFilter(value)}
-                           className="justify-evenly gap-3 *:font-semibold *:text-light-color-scheme-gray-500"
-                           type="single"
-                        >
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="all"
+                        <ScrollArea>
+                           <ToggleGroup
+                              value={filter}
+                              onValueChange={(value) => setFilter(value)}
+                              className="flex justify-evenly gap-3 *:whitespace-nowrap *:font-semibold *:text-light-color-scheme-gray-500"
+                              type="single"
                            >
-                              Tất cả
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="waiting"
-                           >
-                              Đang chờ
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="in-progress"
-                           >
-                              Đang tiến hành
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="confirmed"
-                           >
-                              Đã xác nhận
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="cancelled"
-                           >
-                              Đã hủy
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="failed"
-                           >
-                              Thanh toán thất bại
-                           </ToggleGroupItem>
-                           <ToggleGroupItem
-                              className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
-                              value="refunded"
-                           >
-                              Hoàn tiền
-                           </ToggleGroupItem>
-                        </ToggleGroup>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="all"
+                              >
+                                 Tất cả
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="waiting"
+                              >
+                                 Đang chờ
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="in-progress"
+                              >
+                                 Đang tiến hành
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="confirmed"
+                              >
+                                 Đã xác nhận
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="cancelled"
+                              >
+                                 Đã hủy
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="failed"
+                              >
+                                 Thanh toán thất bại
+                              </ToggleGroupItem>
+                              <ToggleGroupItem
+                                 className="data-[state=on]:bg-blue-50 data-[state=on]:text-blue-700"
+                                 value="refunded"
+                              >
+                                 Hoàn tiền
+                              </ToggleGroupItem>
+                           </ToggleGroup>
+                           <ScrollBar
+                              className="h-1.5"
+                              orientation="horizontal"
+                           />
+                        </ScrollArea>
+                     </div>
+                     {/* List */}
+                  </div>
+                  <div className="mt-4 flex flex-col gap-2">
+                     <ReservedTour />
+                     <ReservedTour />
+                     <ReservedTour />
+                     <ReservedTour />
+                  </div>
+                  <div className="flex justify-between">
+                     <div className=""></div>
+                     <div className="">
+                        <Pagination>
+                           <PaginationContent>
+                              <PaginationItem>
+                                 <PaginationPrevious href="#" />
+                              </PaginationItem>
+                              <PaginationItem>
+                                 {/* <PaginationLink href="#">1</PaginationLink> */}
+                                 <span>1</span>
+                              </PaginationItem>
+                              <PaginationItem>
+                                 <PaginationEllipsis />
+                              </PaginationItem>
+                              <PaginationItem>
+                                 <PaginationNext href="#" />
+                              </PaginationItem>
+                           </PaginationContent>
+                        </Pagination>
                      </div>
                   </div>
                </div>
