@@ -39,3 +39,17 @@ export const login = async (state: LoginFormState, formData: FormData) => {
 
    redirect('/')
 }
+
+// export type LoginFormState =
+//    | {
+//         error?: {
+//            email?: string[]
+//            password?: string[]
+//         }
+//         message?: string
+//      }
+//    | undefined
+
+// export const signup = async (state: SignupFormState, formData: FormData) => {
+
+// }

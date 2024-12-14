@@ -1,5 +1,5 @@
 import { ENDPOINTS } from '@/constants/endpoint'
-import { postPublic } from '@/lib/api'
+import { get, postPublic } from '@/lib/api'
 
 type LoginSuccess = {
    result: {
@@ -16,4 +16,8 @@ export const postLogin = async (email: string, password: string) => {
       },
    })
    return data as LoginSuccess
+}
+
+export const getCurrentUser = () => {
+   return get(ENDPOINTS.AUTH.CURRENT_USER)
 }

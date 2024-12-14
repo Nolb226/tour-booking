@@ -1,6 +1,7 @@
-import { resolve } from 'path'
+'use server'
 import { env } from '../../env.mjs'
 import { notFound } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 const ContentType = {
    json: 'application/json',
@@ -60,6 +61,11 @@ const baseFetch = <T>(
 
       delete options.params
    }
+   if (!isPublicApi) {
+      const token = cookies().get('_session')?.value
+      options.headers.set('Authorization', `Bearer ${token}`)
+   }
+
    console.log(urlWithPrefix)
 
    if (body) options.body = JSON.stringify(body)
@@ -73,7 +79,7 @@ const baseFetch = <T>(
       new Promise(async (resolve, reject) => {
          try {
             const response = await fetch(urlWithPrefix, {
-               // cache: 'no-cache',
+               cache: 'no-cache',
                ...options,
             } as RequestInit)
             switch (response.status) {
@@ -88,7 +94,9 @@ const baseFetch = <T>(
 
             resolve(response.json())
          } catch (error) {
-            reject(error)
+            console.log(error)
+
+            reject({ error })
          }
       }),
    ]) as Promise<T>

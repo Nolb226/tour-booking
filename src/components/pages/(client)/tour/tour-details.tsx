@@ -1,19 +1,17 @@
 'use client'
-
-import Counter from '@/components/Counter'
 import { DayPicker } from '@/components/day-picker'
 import Timeline from '@/components/Timeline'
 import { Button } from '@/components/ui/button'
 import { HoverCardContent } from '@/components/ui/hover-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useMediaQuery from '@/hooks/useMediaQuery'
-import { HoverCard, HoverCardTrigger } from '@radix-ui/react-hover-card'
+import { formatCurrency } from '@/lib/utils'
+import { TourDetail } from '@/model/tour'
+import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
 import {
    CheckIcon,
    ChevronLeft,
-   ChevronRight,
    Clock4Icon,
-   CrossIcon,
    Info,
    LanguagesIcon,
    MapPin,
@@ -21,14 +19,20 @@ import {
 } from 'lucide-react'
 import React, { useState } from 'react'
 
-function TourDetails() {
+import GalleryDialog from './gallery-dialog'
+import MapDialog from './map-dialog'
+import Counter from '@/components/counter'
+import { format } from 'date-fns'
+import { bookingTour } from '@/actions/booking'
+
+function TourDetails({ tour }: { tour: TourDetail }) {
    const [date, setDate] = useState<Date>()
    const isDesktop = useMediaQuery('(min-width: 768px)')
+   const [adults, setAdults] = useState(1)
+   const [children, setChildren] = useState(0)
    return (
       <div className="h-full bg-[#f5faff]">
-         <div className="sticky top-[64px] h-[44px] rounded-b-3xl border-t border-t-light-color-scheme-gray-200 bg-white shadow-sm">
-            Test
-         </div>
+         <div className="sticky top-[64px] z-[5] h-[44px] rounded-b-3xl border-t border-t-light-color-scheme-gray-200 bg-white shadow-sm"></div>
          <div className="container mx-auto flex flex-col gap-3 pt-10 md:gap-4">
             <div className="rounded-xl border border-light-color-scheme-gray-300 bg-white p-4 md:p-2">
                <div className="flex flex-col-reverse gap-1 lg:flex-col">
@@ -37,7 +41,7 @@ function TourDetails() {
                         <div className="flex items-center gap-2">
                            <ChevronLeft className="h-6 w-6 max-md:hidden" />
                            <h1 className="line-clamp-2 text-lg font-semibold text-gray-900 md:line-clamp-1 lg:text-2xl">
-                              Tour Ngắm Hoàng Hôn Và Câu Mực Đêm
+                              {tour.title}
                            </h1>
                         </div>
                         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -60,18 +64,18 @@ function TourDetails() {
                      <div className="flex flex-col gap-3">
                         <div className="flex flex-col max-md:items-end">
                            <div className="flex items-center gap-2.5">
-                              <span className="text-lg text-gray-400">Từ</span>{' '}
+                              {/* <span className="text-lg text-gray-400">Từ</span>{' '}
                               <s className="text-lg text-gray-400 max-md:text-sm">
                                  300.000đ
-                              </s>
+                              </s> */}
                               <span className="line-clamp-2 text-2xl font-semibold text-orange-600 max-md:text-xl md:line-clamp-1">
-                                 200.000đ
+                                 {formatCurrency(tour.price)}
                               </span>
-                              <span className="text-lg text-gray-400">
+                              <span className="text-nowrap text-lg text-gray-400">
                                  mỗi người lớn
                               </span>
                            </div>
-                           <div className="text-right text-base text-gray-400">
+                           <div className="text-nowrap text-right text-base text-gray-400">
                               Bao gồm cả thuế và phí
                            </div>
                         </div>
@@ -90,20 +94,8 @@ function TourDetails() {
                         />
                      </div>
                   </div>
-                  <div className="hidden max-h-[60vh] grid-cols-6 grid-rows-2 md:grid">
-                     <div className="col-span-3 row-span-2">
-                        <img
-                           src="https://api.soctrip.com/storage/files/web/vn_20240827T092928122821382_6b0cb9aa-5037-4d05-8fd1-94fb07e06d33_OPTION5.webp"
-                           alt=""
-                        />
-                     </div>
-                     <div className=""></div>
-                     <div className=""></div>
-                     <div className=""></div>
-                     <div className=""></div>
-                     <div className=""></div>
-                     <div className=""></div>
-                  </div>
+
+                  <GalleryDialog tour={tour} />
                </div>
             </div>
             <div className="flex">
@@ -112,38 +104,10 @@ function TourDetails() {
                      <h4 className="text-lg font-semibold text-light-color-scheme-gray-800">
                         Điểm nổi bật
                      </h4>
-                     <div className="text-left text-sm">
-                        <p>
-                           <strong>
-                              Tour Ngắm Hoàng Hôn Và Câu Mực Đêm Đã đến Phú Quốc
-                           </strong>
-                        </p>
-                        thì không thể bỏ qua hoạt động ngắm hoàng hôn, mà đặc
-                        biệt lại là ngắm hoàng hôn trên tàu đang ra khơi. Buổi
-                        tối quý khách sẽ được trải nghiệm câu mực đêm, thấu hiểu
-                        được cuộc sống lênh đênh trên biển khơi của ngư dân Phú
-                        Quốc. Đối với những quý khách dễ say sóng, tips nhỏ là
-                        nên ăn nhẹ để lót dạ bằng bánh mì, bánh bao hoặc bánh
-                        ngọt,... và uống 1 viên thuốc chống say sóng 30 phút
-                        trước khi lên tàu nhé, điều này giúp quý khách dễ chịu
-                        hơn nhiều đấy. Mặc đồ ấm là một trong những cách giảm
-                        tình trạng say sóng đáng kể, do Việt Nam là một đất nước
-                        có khí hậu nóng ẩm nên chúng ta không quen với những cơn
-                        gió lạnh đột ngột, hãy chuẩn bị áo khoác hoặc khăn
-                        choàng cổ để giữ ấm cơ thể nha. Cuối cùng là lựa chọn
-                        gửi gắm niềm tin vào một địa chỉ tổ chức tour câu mực
-                        đêm uy tín để chuyến du lịch Phú Quốc của mình được trọn
-                        vẹn nhất nhé. John’s Tours là công ty đầu tiên tại Phú
-                        Quốc được cấp phép lữ hành quốc tế đủ tiêu chuẩn phục vụ
-                        những lượt khách khắt khe nhất cùng với 15 năm kinh
-                        nghiệm trong lĩnh vực tổ chức tour tham quan đảo, John’s
-                        Tours chắc chắn không làm bạn thất vọng. ĐIỂM NỔI BẬT:
-                        Ngắm bầu trời đỏ rực trong ánh chiều tà trên hai tầng
-                        của tàu John’s Tours. Hồi hộp chờ đợi chiến lợi phẩm khi
-                        quý khách trổ tài câu mực đêm trên biển Phú Quốc. Thưởng
-                        thức bữa tối và ngắm thành phố lung linh khi màn đêm
-                        buông xuống.
-                     </div>
+                     <div
+                        dangerouslySetInnerHTML={{ __html: tour.highlight }}
+                        className="text-left text-sm"
+                     ></div>
                   </div>
                   {/* Service */}
                   <div className="rounded-xl border border-light-color-scheme-gray-200 bg-white p-4 px-4 py-3 shadow-xs md:py-4">
@@ -216,7 +180,12 @@ function TourDetails() {
                                  <div className="text-sm font-medium text-light-color-scheme-gray-800">
                                     Người lớn
                                  </div>
-                                 <Counter minimum={1} />
+                                 <Counter
+                                    minimum={1}
+                                    maximum={8}
+                                    defaultValue={adults}
+                                    onValueChange={(value) => setAdults(value)}
+                                 />
                               </div>
                               <div className="mt-3 flex items-center justify-between">
                                  <div className="flex items-center gap-2 text-sm font-medium text-light-color-scheme-gray-800">
@@ -236,7 +205,13 @@ function TourDetails() {
                                        </HoverCardContent>
                                     </HoverCard>
                                  </div>
-                                 <Counter />
+                                 <Counter
+                                    maximum={8}
+                                    defaultValue={adults}
+                                    onValueChange={(value) =>
+                                       setChildren(value)
+                                    }
+                                 />
                               </div>
                            </div>
                         </div>
@@ -248,10 +223,13 @@ function TourDetails() {
                            Hành trình
                         </h4>
                         <div className="">
-                           <Button className="bg-light-color-scheme-primary-50 text-sm font-bold text-light-color-scheme-primary-700">
-                              Xem trước
-                              <ChevronRight className="size-5" />
-                           </Button>
+                           <MapDialog
+                              centerPoint={[
+                                 tour.location?.latitude!,
+                                 tour.location?.longitude!,
+                              ]}
+                              itineraries={tour.itineraries}
+                           />
                         </div>
                      </div>
                      <div className="">
@@ -264,22 +242,64 @@ function TourDetails() {
                                           Tất cả các ngày
                                        </TabsTrigger>
                                     </li>
-                                    <li>
-                                       <TabsTrigger value="day-1">
-                                          Ngày 1
-                                       </TabsTrigger>
-                                    </li>
+                                    {tour.itineraries
+                                       .sort((a, b) => a.day_no - b.day_no)
+                                       .map((itinerary, index) => (
+                                          <li key={index}>
+                                             <TabsTrigger
+                                                value={index.toString()}
+                                             >
+                                                Ngày {itinerary.day_no}
+                                             </TabsTrigger>
+                                          </li>
+                                       ))}
                                  </ul>
                               </TabsList>
                            </div>
                            <div className="pt-4">
                               <TabsContent value="all">
-                                 <Timeline />
-                                 <Timeline />
-                                 <Timeline />
-                                 <Timeline />
-                                 <Timeline />
+                                 {tour.itineraries.map((itinerary, index) => (
+                                    <div
+                                       key={`iti-${itinerary.title}/${index}`}
+                                    >
+                                       <p className="mb-3 text-sm font-semibold text-light-color-scheme-gray-500">
+                                          {itinerary.title}
+                                       </p>
+                                       {itinerary.placeVisits
+                                          .sort(
+                                             (a, b) =>
+                                                a.order_number - b.order_number
+                                          )
+                                          .map((visit, index) => (
+                                             <Timeline
+                                                key={visit.place.id}
+                                                place={visit}
+                                             />
+                                          ))}
+                                    </div>
+                                 ))}
                               </TabsContent>
+                              {tour.itineraries.map((itinerary, index) => (
+                                 <TabsContent
+                                    key={index}
+                                    value={index.toString()}
+                                 >
+                                    <p className="mb-3 text-sm font-semibold text-light-color-scheme-gray-500">
+                                       {itinerary.title}
+                                    </p>
+                                    {itinerary.placeVisits
+                                       .sort(
+                                          (a, b) =>
+                                             a.order_number - b.order_number
+                                       )
+                                       .map((visit, index) => (
+                                          <Timeline
+                                             key={visit.place.id}
+                                             place={visit}
+                                          />
+                                       ))}
+                                 </TabsContent>
+                              ))}
                            </div>
                         </Tabs>
                      </div>
@@ -288,16 +308,11 @@ function TourDetails() {
                      <h4 className="text-lg font-semibold text-light-color-scheme-gray-800">
                         Chính sách
                      </h4>
-                     <div className="px-3 py-3.5 text-sm text-light-color-scheme-gray-700">
-                        Giá tour chưa bao gồm: Hóa đơn GTGT Chi phí ăn uống
-                        ngoài chương trình: bia, rượu, nước ngọt... Chi phí cá
-                        nhân, chi phí tham quan các điểm ngoài chương trình. Giá
-                        tour trẻ em: Trẻ em dưới 5 tuổi: miễn phí. Trẻ em từ 06
-                        tuổi đến 11 tuổi: 50% giá tour. Trẻ em từ 12 tuổi trở
-                        lên: 100% giá tour. Nên mang theo gì? Kính mát Máy quay
-                        phim, chụp hình Lưu ý: Mekong Delta Explorer CAM KẾT
-                        CHẤT LƯỢNG DỊCH VỤ liên quan đến chương trình này tốt
-                        nhất hiện có.
+                     <div className="prose px-3 py-3.5 text-sm text-light-color-scheme-gray-700">
+                        <div
+                           className="prose-sm"
+                           dangerouslySetInnerHTML={{ __html: tour.policy }}
+                        ></div>
                      </div>
                   </div>
                </div>
@@ -322,7 +337,12 @@ function TourDetails() {
                            <div className="text-sm font-medium text-light-color-scheme-gray-800">
                               Người lớn
                            </div>
-                           <Counter minimum={1} />
+                           <Counter
+                              defaultValue={adults}
+                              onValueChange={setAdults}
+                              maximum={8}
+                              minimum={1}
+                           />
                         </div>
                         <div className="mt-3 flex items-center justify-between">
                            <div className="flex items-center gap-2 text-sm font-medium text-light-color-scheme-gray-800">
@@ -342,11 +362,49 @@ function TourDetails() {
                                  </HoverCardContent>
                               </HoverCard>
                            </div>
-                           <Counter />
+                           <Counter
+                              defaultValue={children}
+                              onValueChange={setChildren}
+                              maximum={8}
+                           />
                         </div>
                      </div>
                   </div>
                </div>
+            </div>
+         </div>
+         <div className="fixed bottom-0 z-10 w-full border-t border-gray-200 bg-white shadow-sm md:rounded-tl-xl md:rounded-tr-xl">
+            <div className="mx-auto flex items-center justify-between p-4 md:w-[1200px] md:px-0">
+               <div className="flex flex-col gap-1 md:gap-0">
+                  <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+                     <h4 className="font-semibold text-gray-900 md:text-lg">
+                        Tổng thanh toán:
+                     </h4>
+                     <div className="text-xl font-bold text-orange-600 md:text-[24px]">
+                        {formatCurrency(
+                           tour.price * adults + tour.price * 0.1 * children
+                        )}
+                     </div>
+                  </div>
+                  <span className="text-start text-sm font-medium text-gray-700">
+                     Bao gồm thuế và phí
+                  </span>
+               </div>
+               <Button
+                  onClick={() => {
+                     bookingTour({
+                        tourId: tour.id,
+
+                        startTime: format(date!, 'yyyy-MM-dd'),
+                        numberOfAdults: adults,
+                        numberOfChildren: children,
+                     })
+                  }}
+                  variant={'highlight'}
+                  className="w-full md:w-auto"
+               >
+                  Đặt ngay
+               </Button>
             </div>
          </div>
       </div>

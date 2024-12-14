@@ -1,10 +1,30 @@
-import { cn } from '@/lib/utils'
-import { BookMarkedIcon, EllipsisVerticalIcon } from 'lucide-react'
-import React from 'react'
+'use client'
+import { bookmarkTourAction } from '@/actions/tour'
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { cn, formatDayPast } from '@/lib/utils'
+import { BookmarkedTour as TBookmarkedTour } from '@/model/tour'
+import {
+   BookMarkedIcon,
+   BookmarkMinusIcon,
+   EllipsisVerticalIcon,
+   MapPinCheckInsideIcon,
+} from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React, { memo, useMemo } from 'react'
 
-interface BookmarkedTour extends React.HTMLAttributes<HTMLDivElement> {}
+interface BookmarkedTourProps extends React.HTMLAttributes<HTMLDivElement> {
+   tour: TBookmarkedTour
+}
 
-function BookmarkedTour({ className }: BookmarkedTour) {
+function BookmarkedTour({ className, tour }: BookmarkedTourProps) {
+   const router = useRouter()
+
    return (
       <div
          className={cn(
@@ -16,7 +36,7 @@ function BookmarkedTour({ className }: BookmarkedTour) {
             <div className="relative size-16">
                <img
                   className="h-full w-full rounded-md"
-                  src="https://api.soctrip.com/storage/files/web/vn_20240912T092403262333300_3f6d1965-fe4a-4405-964a-630f80f41a2a_epthiennhientruphu021663693951.webp"
+                  src={tour.avt}
                   alt=""
                />
                <div className="- absolute -bottom-1.5 -right-2.5 flex size-7 items-center justify-center rounded-full bg-yellow-400">
@@ -25,19 +45,49 @@ function BookmarkedTour({ className }: BookmarkedTour) {
             </div>
             <div className="flex flex-col gap-1">
                <h3 className="line-clamp-1 text-base font-medium text-light-color-scheme-gray-900">
-                  KHÁM PHÁ ĐẤT RỪNG PHƯƠNG NAM U MINH HẠ - ĐẤT MŨI CỰC NAM TỔ
-                  QUỐC
+                  {tour.title}
                </h3>
                <div className="text-sm text-light-color-scheme-gray-600">
-                  Đã lưu 7 giờ trước
+                  <div className="flex items-center gap-1">
+                     <span>{tour.location}</span>
+                     <div className="size-1 rounded-full bg-gray-500" />
+                     <span>
+                        Đã lưu {formatDayPast(tour.createdAt).toLowerCase()}
+                     </span>
+                  </div>
                </div>
             </div>
          </div>
          <div className="">
-            <EllipsisVerticalIcon className="size-4" />
+            <DropdownMenu>
+               <DropdownMenuTrigger>
+                  <EllipsisVerticalIcon className="size-4" />
+               </DropdownMenuTrigger>
+               <DropdownMenuContent className="text-light-color-scheme-gray-500">
+                  <DropdownMenuItem
+                     asChild
+                     className="flex items-center gap-1 px-4"
+                  >
+                     <Link target="_blank" href={`/tour/${tour.slug}`}>
+                        <MapPinCheckInsideIcon className="size-4" />
+                        <span className="text-sm font-semibold">Đặt ngay</span>
+                     </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                     onClick={() => {
+                        bookmarkTourAction(tour.id)
+                        router.refresh()
+                     }}
+                     className="flex items-center gap-1 px-4"
+                  >
+                     <BookmarkMinusIcon className="size-4" />
+                     <span className="text-sm font-semibold">Bỏ lưu</span>
+                  </DropdownMenuItem>
+               </DropdownMenuContent>
+            </DropdownMenu>
          </div>
       </div>
    )
 }
 
-export default BookmarkedTour
+export default memo(BookmarkedTour)
